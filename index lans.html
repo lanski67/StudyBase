@@ -612,30 +612,18 @@
     <p style="margin-top:4px;">Comments are powered by Firebase. Keep it respectful.</p>
 </footer>
 
-<!--
-=================================================================
-FIREBASE INTEGRATION — UNCOMMENT AND CONFIGURE WHEN READY
-=================================================================
-Steps:
-  1. Go to https://console.firebase.google.com
-  2. Create a project → Enable Firestore Database (start in test mode)
-  3. Add a Web App in Project Settings, copy your config
-  4. Replace the placeholder values below
-  5. Remove the old submitComment listener in the vanilla script below
-  6. Uncomment this entire block
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyDvRtreJ9B-Nmlqm_dOFgyYdrQuyvSalRg",
+    authDomain: "studybase-50996.firebaseapp.com",
+    projectId: "studybase-50996",
+    storageBucket: "studybase-50996.firebasestorage.app",
+    messagingSenderId: "1095383394259",
+    appId: "1:1095383394259:web:8a0618a2d924ba76463126"
   };
 
   const app = initializeApp(firebaseConfig);
