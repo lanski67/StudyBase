@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyBase – Student Hub</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --paper: #F6F4F1;
+            --stone: #E4DED2;
+            --coral: #F35C4B;
+            --black: #000000;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--black);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        /* NAV */
+        nav {
+            background: var(--black);
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .logo {
+            color: var(--coral);
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .logo span { color: #fff; }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 22px;
+        }
+
+        nav ul li a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.88rem;
+            transition: color 0.15s;
+        }
+
+        nav ul li a:hover { color: var(--coral); }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #fff;
+            transition: all 0.2s;
+        }
+
+        /* HERO */
+        .hero {
+            padding: 56px 28px 36px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .eyebrow {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--coral);
+            margin-bottom: 10px;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.7rem, 5vw, 2.8rem);
+            line-height: 1.18;
+            margin-bottom: 14px;
+            max-width: 620px;
+        }
+
+        .hero h1 em {
+            color: var(--coral);
+            font-style: normal;
+        }
+
+        .hero p {
+            color: #555;
+            max-width: 520px;
+            margin-bottom: 26px;
+            font-size: 0.95rem;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: 2px solid var(--black);
+            text-decoration: none;
+            transition: all 0.15s;
+            display: inline-block;
+        }
+
+        .btn-fill {
+            background: var(--coral);
+            color: #fff;
+            border-color: var(--coral);
+        }
+
+        .btn-fill:hover { background: #d9432f; border-color: #d9432f; }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--black);
+        }
+
+        .btn-outline:hover {
+            background: var(--black);
+            color: #fff;
+        }
+
+        /* DIVIDER */
+        .divider {
+            border: none;
+            border-top: 1.5px solid var(--stone);
+            margin: 0 28px;
+        }
+
+        /* SECTIONS */
+        .section-wrap {
+            padding: 44px 28px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-wrap h2 {
+            font-size: 1.5rem;
+            margin-bottom: 22px;
+        }
+
+        /* TOOLS */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--stone);
+            border-radius: 10px;
+            padding: 22px;
+        }
+
+        .card > h3 {
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .card > .sub {
+            font-size: 0.78rem;
+            color: #666;
+            margin-bottom: 14px;
+        }
+
+        /* TIMER */
+        .mode-row {
+            display: flex;
+            gap: 7px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1.5px solid #aaa;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .mode-btn.active {
+            background: var(--black);
+            color: #fff;
+            border-color: var(--black);
+        }
+
+        .timer-display {
+            font-size: 3rem;
+            font-weight: 800;
+            text-align: center;
+            margin: 10px 0 14px;
+            letter-spacing: 3px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer-btns {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .timer-btns button {
+            padding: 8px 20px;
+            border-radius: 6px;
+            border: 2px solid var(--black);
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: transparent;
+            transition: all 0.15s;
+        }
+
+        .timer-btns button:hover {
+            background: var(--black);
+            color: #fff;
+        }
+
+        #startBtn {
+            background: var(--coral);
+            border-color: var(--coral);
+            color: #fff;
+        }
+
+        #startBtn:hover { background: #d9432f; border-color: #d9432f; }
+
+        /* NOTES */
+        .notes-area {
+            width: 100%;
+            min-height: 148px;
+            border: 2px solid #bbb;
+            border-radius: 7px;
+            padding: 11px 13px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            background: var(--paper);
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .notes-area:focus { border-color: var(--coral); }
+
+        .notes-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .char-count {
+            font-size: 0.72rem;
+            color: #888;
+        }
+
+        .clear-btn {
+            font-size: 0.78rem;
+            padding: 5px 13px;
+            border-radius: 5px;
+            border: 1.5px solid var(--black);
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.15s;
+        }
+
+        .clear-btn:hover {
+            background: var(--black);
+            color: #fff;
+        }
+
+        /* TIPS */
+        .tips-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .tip-item {
+            background: var(--stone);
+            border-radius: 8px;
+            padding: 14px 18px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .tip-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .tip-item h4 { font-size: 0.93rem; margin-bottom: 3px; }
+
+        .tip-item p { font-size: 0.82rem; color: #555; }
+
+        /* COMMENTS */
+        .comment-form {
+            background: var(--stone);
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 26px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .form-row input,
+        .comment-form textarea {
+            width: 100%;
+            padding: 9px 13px;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            background: var(--paper);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-row input:focus,
+        .comment-form textarea:focus {
+            border-color: var(--coral);
+        }
+
+        .comment-form textarea {
+            min-height: 86px;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        .submit-row {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* COMMENT LIST */
+        .comment-item {
+            padding: 16px 0;
+            border-bottom: 1.5px solid var(--stone);
+        }
+
+        .comment-item:last-child { border-bottom: none; }
+
+        .comment-meta {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--coral);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .meta-info .author { font-weight: 700; font-size: 0.9rem; }
+
+        .meta-info .badge {
+            font-size: 0.72rem;
+            color: #777;
+            margin-left: 6px;
+            background: var(--stone);
+            padding: 1px 7px;
+            border-radius: 10px;
+        }
+
+        .meta-info .time { font-size: 0.72rem; color: #999; margin-top: 1px; }
+
+        .comment-text {
+            font-size: 0.88rem;
+            line-height: 1.55;
+            color: #222;
+            padding-left: 44px;
+        }
+
+        .no-comments {
+            text-align: center;
+            color: #999;
+            font-size: 0.88rem;
+            padding: 36px 0;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--black);
+            color: #888;
+            text-align: center;
+            padding: 18px 24px;
+            font-size: 0.78rem;
+            margin-top: 20px;
+        }
+
+        footer a { color: var(--coral); text-decoration: none; }
+
+        /* MOBILE */
+        @media (max-width: 580px) {
+            .hamburger { display: flex; }
+
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 54px;
+                left: 0;
+                right: 0;
+                background: #111;
+                flex-direction: column;
+                padding: 16px 28px;
+                gap: 16px;
+            }
+
+            nav ul.open { display: flex; }
+            nav { position: relative; }
+
+            .form-row { grid-template-columns: 1fr; }
+
+            .hero { padding: 36px 20px 28px; }
+            .section-wrap { padding: 32px 20px; }
+            .divider { margin: 0 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="#" class="logo">Study<span>Base</span></a>
+    <ul id="navMenu">
+        <li><a href="#tools">Tools</a></li>
+        <li><a href="#tips">Tips</a></li>
+        <li><a href="#discuss">Discussion</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<div class="hero">
+    <p class="eyebrow">For Students · By Students</p>
+    <h1>A simple <em>study hub</em> built for high school.</h1>
+    <p>Quick tools, practical tips, and a space to talk. No ads, no distractions — just stuff that actually helps.</p>
+    <div class="hero-btns">
+        <a href="#tools" class="btn btn-fill">Open Tools</a>
+        <a href="#discuss" class="btn btn-outline">Leave a Comment</a>
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- TOOLS -->
+<div class="section-wrap" id="tools">
+    <p class="eyebrow">Tools</p>
+    <h2>Study Tools</h2>
+    <div class="tools-grid">
+
+        <div class="card">
+            <h3>⏱ Pomodoro Timer</h3>
+            <p class="sub">Work in focused bursts. Rest between them.</p>
+            <div class="mode-row">
+                <button class="mode-btn active" data-mins="25">Focus 25</button>
+                <button class="mode-btn" data-mins="5">Break 5</button>
+                <button class="mode-btn" data-mins="15">Long Break</button>
+            </div>
+            <div class="timer-display" id="timerDisplay">25:00</div>
+            <div class="timer-btns">
+                <button id="startBtn">Start</button>
+                <button id="resetBtn">Reset</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📝 Quick Notes</h3>
+            <p class="sub">Scratch pad for ideas. Clears when you refresh.</p>
+            <textarea class="notes-area" id="notesArea" placeholder="Type something..."></textarea>
+            <div class="notes-footer">
+                <span class="char-count" id="charCount">0 characters</span>
+                <button class="clear-btn" id="clearBtn">Clear</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- TIPS -->
+<div class="section-wrap" id="tips">
+    <p class="eyebrow">Tips</p>
+    <h2>Study Smarter, Not Harder</h2>
+    <div class="tips-wrap">
+        <div class="tip-item">
+            <span class="tip-icon">🧠</span>
+            <div>
+                <h4>Active recall beats re-reading</h4>
+                <p>After studying, close your notes and try to recall everything from memory. It feels harder — that's exactly why it works.</p>
+            </div>
+        </div>
+        <div class="tip-item">
+            <span class="tip-icon">📅</span>
+            <div>
+                <h4>Space out your reviews</h4>
+                <p>Review material after 1 day, 3 days, then a week. Spaced repetition is one of the most research-backed study methods.</p>
+            </div>
+        </div>
+        <div class="tip-item">
+            <span class="tip-icon">📵</span>
+            <div>
+                <h4>Phone in another room — actually</h4>
+                <p>Even a face-down phone on the desk drains your focus. Put it away. The notifs will still be there in 25 minutes.</p>
+            </div>
+        </div>
+        <div class="tip-item">
+            <span class="tip-icon">😴</span>
+            <div>
+                <h4>Sleep consolidates memory</h4>
+                <p>Your brain processes what you learned while you sleep. Studying until 2am almost always backfires. Sleep, then review.</p>
+            </div>
+        </div>
+        <div class="tip-item">
+            <span class="tip-icon">✏️</span>
+            <div>
+                <h4>Teach it out loud</h4>
+                <p>Try explaining a concept to yourself as if you're teaching it. If you can't explain it simply, you don't fully understand it yet.</p>
+            </div>
+        </div>
+        <div class="tip-item">
+            <span class="tip-icon">📖</span>
+            <div>
+                <h4>Chunk big tasks</h4>
+                <p>"Study for the exam" is too vague. Try "review Chapter 3 definitions" — specific tasks are easier to start and finish.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- COMMENTS -->
+<div class="section-wrap" id="discuss">
+    <p class="eyebrow">Discussion</p>
+    <h2>Student Comments</h2>
+    <p style="font-size:0.85rem;color:#666;margin-bottom:22px;">Got a study tip? A question? Just say hi. Keep it decent.</p>
+
+    <div class="comment-form">
+        <div class="form-row">
+            <input type="text" id="commentName" placeholder="Your name *" maxlength="40">
+            <input type="text" id="commentGrade" placeholder="Grade / Section (optional)" maxlength="30">
+        </div>
+        <textarea id="commentText" placeholder="Write your comment..."></textarea>
+        <div class="submit-row">
+            <button class="btn btn-fill" id="submitComment">Post Comment</button>
+        </div>
+    </div>
+
+    <div id="commentsList">
+        <div class="no-comments">No comments yet. Be the first to post!</div>
+    </div>
+</div>
+
+<footer>
+    <p>StudyBase &mdash; A student hub for Filipino high school &amp; SHS students &bull; <a href="https://github.com" target="_blank">GitHub</a></p>
+    <p style="margin-top:4px;">Comments are powered by Firebase. Keep it respectful.</p>
+</footer>
+
+<!--
+=================================================================
+FIREBASE INTEGRATION — UNCOMMENT AND CONFIGURE WHEN READY
+=================================================================
+Steps:
+  1. Go to https://console.firebase.google.com
+  2. Create a project → Enable Firestore Database (start in test mode)
+  3. Add a Web App in Project Settings, copy your config
+  4. Replace the placeholder values below
+  5. Remove the old submitComment listener in the vanilla script below
+  6. Uncomment this entire block
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const col = collection(db, "comments");
+
+  // Real-time listener
+  onSnapshot(query(col, orderBy("timestamp", "desc")), (snap) => {
+    const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderComments(data.map(c => ({
+      name: c.name,
+      grade: c.grade || "",
+      text: c.text,
+      date: c.timestamp ? c.timestamp.toDate() : new Date()
+    })));
+  });
+
+  document.getElementById("submitComment").addEventListener("click", async () => {
+    const name = document.getElementById("commentName").value.trim();
+    const grade = document.getElementById("commentGrade").value.trim();
+    const text = document.getElementById("commentText").value.trim();
+    if (!name || !text) { alert("Name and comment are required."); return; }
+    await addDoc(col, { name, grade, text, timestamp: serverTimestamp() });
+    document.getElementById("commentName").value = "";
+    document.getElementById("commentGrade").value = "";
+    document.getElementById("commentText").value = "";
+  });
+</script>
+=================================================================
+-->
+
+<script>
+    // --- NAV ---
+    document.getElementById("hamburger").addEventListener("click", function() {
+        document.getElementById("navMenu").classList.toggle("open");
+    });
+
+    document.querySelectorAll("#navMenu a").forEach(function(link) {
+        link.addEventListener("click", function() {
+            document.getElementById("navMenu").classList.remove("open");
+        });
+    });
+
+    // --- POMODORO ---
+    var timerInterval = null;
+    var timeLeft = 25 * 60;
+    var isRunning = false;
+
+    var timerDisplay = document.getElementById("timerDisplay");
+    var startBtn = document.getElementById("startBtn");
+
+    function pad(n) { return String(n).padStart(2, "0"); }
+    function showTime(s) { timerDisplay.textContent = pad(Math.floor(s/60)) + ":" + pad(s%60); }
+
+    startBtn.addEventListener("click", function() {
+        if (isRunning) {
+            clearInterval(timerInterval);
+            isRunning = false;
+            startBtn.textContent = "Resume";
+        } else {
+            isRunning = true;
+            startBtn.textContent = "Pause";
+            timerInterval = setInterval(function() {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    startBtn.textContent = "Start";
+                    timerDisplay.textContent = "Done!";
+                    return;
+                }
+                timeLeft--;
+                showTime(timeLeft);
+            }, 1000);
+        }
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", function() {
+        clearInterval(timerInterval);
+        isRunning = false;
+        startBtn.textContent = "Start";
+        var active = document.querySelector(".mode-btn.active");
+        timeLeft = parseInt(active.dataset.mins) * 60;
+        showTime(timeLeft);
+    });
+
+    document.querySelectorAll(".mode-btn").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+            document.querySelectorAll(".mode-btn").forEach(function(b) { b.classList.remove("active"); });
+            btn.classList.add("active");
+            clearInterval(timerInterval);
+            isRunning = false;
+            startBtn.textContent = "Start";
+            timeLeft = parseInt(btn.dataset.mins) * 60;
+            showTime(timeLeft);
+        });
+    });
+
+    // --- NOTES ---
+    var notesArea = document.getElementById("notesArea");
+    var charCount = document.getElementById("charCount");
+
+    notesArea.addEventListener("input", function() {
+        var len = notesArea.value.length;
+        charCount.textContent = len + " character" + (len !== 1 ? "s" : "");
+    });
+
+    document.getElementById("clearBtn").addEventListener("click", function() {
+        notesArea.value = "";
+        charCount.textContent = "0 characters";
+        notesArea.focus();
+    });
+
+    // --- COMMENTS (in-memory placeholder until Firebase is connected) ---
+    var comments = [];
+
+    function initials(name) {
+        return name.trim().split(/\s+/).map(function(w) { return w[0]; }).join("").toUpperCase().slice(0, 2);
+    }
+
+    function timeAgo(date) {
+        var secs = Math.floor((Date.now() - date) / 1000);
+        if (secs < 10) return "just now";
+        if (secs < 60) return secs + "s ago";
+        var m = Math.floor(secs / 60);
+        if (m < 60) return m + "m ago";
+        var h = Math.floor(m / 60);
+        if (h < 24) return h + "h ago";
+        return Math.floor(h / 24) + "d ago";
+    }
+
+    function safe(str) {
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function renderComments(list) {
+        var el = document.getElementById("commentsList");
+        if (!list.length) {
+            el.innerHTML = '<div class="no-comments">No comments yet. Be the first to post!</div>';
+            return;
+        }
+        el.innerHTML = list.map(function(c) {
+            return '<div class="comment-item">' +
+                '<div class="comment-meta">' +
+                    '<div class="avatar">' + initials(c.name) + '</div>' +
+                    '<div class="meta-info">' +
+                        '<div><span class="author">' + safe(c.name) + '</span>' +
+                        (c.grade ? '<span class="badge">' + safe(c.grade) + '</span>' : '') +
+                        '</div>' +
+                        '<div class="time">' + timeAgo(c.date) + '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="comment-text">' + safe(c.text) + '</div>' +
+            '</div>';
+        }).join("");
+    }
+
+    // Remove this listener block when switching to Firebase
+    document.getElementById("submitComment").addEventListener("click", function() {
+        var name = document.getElementById("commentName").value.trim();
+        var grade = document.getElementById("commentGrade").value.trim();
+        var text = document.getElementById("commentText").value.trim();
+
+        if (!name) { alert("Please enter your name."); return; }
+        if (!text) { alert("Please write something before posting."); return; }
+        if (text.length < 3) { alert("Comment is too short."); return; }
+
+        comments.unshift({ name: name, grade: grade, text: text, date: Date.now() });
+        renderComments(comments);
+
+        document.getElementById("commentName").value = "";
+        document.getElementById("commentGrade").value = "";
+        document.getElementById("commentText").value = "";
+        document.getElementById("commentsList").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    // Refresh timestamps every 30s
+    setInterval(function() {
+        if (comments.length > 0) renderComments(comments);
+    }, 30000);
+
+</script>
+</body>
+</html>
